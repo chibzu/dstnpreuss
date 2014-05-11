@@ -1,0 +1,104 @@
+<html>
+<head>
+	<title>Chibblechat</title>
+	<style>
+		#chatbox {
+			height: 600px;
+			width: 800px;
+			background-color: #ccc;
+			overflow-y: scroll;
+			overflow-x: hidden;
+			float:left;
+		}
+		
+		#chat_controls{
+			clear: both;
+		}		
+
+		#textbox {
+			width: 700px;
+			clear: both;
+		}
+
+		#userbox {
+			height: 600px;
+			width: 190px;
+			background-color: #ccc;
+			margin-left: 10px;
+			float:left;
+		}
+	</style>
+
+	<script type='text/javascript'>
+		var user = prompt("Username:");
+		var ws;
+		document.addEventListener("DOMContentLoaded", function() {
+			var chatbox = document.querySelector("#chatbox");
+			var textbox = document.querySelector("#textbox");
+			var userBox = document.querySelector("#userbox");
+			var send = document.querySelector("#send");
+			ws = new WebSocket("ws://107.170.239.201:1337");
+			ws.onopen = function(){
+				addMessage("Welcome to chibblechat!");
+				ws.send(JSON.stringify({"action":"join", "data":user}));
+			}
+			
+			ws.onmessage = function(event)	{
+				var msg = JSON.parse(event.data);
+				if (msg.action === "chat")
+					addMessage(msg.data);	
+				else if (msg.action === "join")
+					userJoin(msg.data);
+				else if (msg.action === "leave")
+					userLeave(msg.data);
+			}
+
+			function addMessage(message) {
+				var newMsg = document.createElement("div");
+				newMsg.innerHTML = message;
+				chatbox.appendChild(newMsg);	
+			} 
+
+			function sendMessage(){				
+				var msg = {"action":"chat", "data": user+": " + textbox.value};
+				ws.send(JSON.stringify(msg));
+				textbox.value = "";
+			}		
+
+			send.addEventListener("click", sendMessage);
+			textbox.addEventListener("keyup", function(evt){
+				if (evt.keyCode == 13)
+					sendMessage()
+			});			
+
+			function userJoin(user){
+				var newUser = document.createElement("div");
+				newUser.id = user;
+				newUser.innerHTML = user;
+				userbox.appendChild(newUser);
+			}
+
+			function userLeave(user){
+				var goneUser = document.querySelector("#"+user);
+				goneUser.parentNode.removeChild(goneUser);
+			}
+		});
+
+		window.onbeforeunload = function(){
+			ws.send(JSON.stringify({"action":"leave", "data":user}));
+			ws.close();
+		}
+	</script>
+</head>
+<body>
+	<div id='chatbox'>
+		
+	</div>
+	<div id='userbox'>
+
+	</div>
+	<div id='chat_controls'>
+		<input id='textbox' type='text'/><button id='send'>send</button>
+	</div>
+</body>
+</html>

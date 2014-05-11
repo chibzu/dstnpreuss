@@ -1,0 +1,154 @@
+<html>
+	<head>
+		<title>dstnpreuss.com</title>		
+		<link rel='icon' type='image/png' href='./media/favicon.png'/>
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono:700' rel='stylesheet' type='text/css'>
+		<style type='text/css'>
+			a {
+				text-decoration: none;
+				color: #F0F0F0;
+			}
+			
+			a:hover {
+				text-decoration: underline;				
+			}
+			
+			body {
+				width: 100%;
+				background-color: #252525;
+				text-align: center;
+				margin: 0;
+			}
+			
+			.social_icons {
+				font-family: 'brandico';
+			}
+			
+			#contact_info {
+				width: 500px;
+				height: 400px;
+				display: inline-block;
+				background-color: #36A4B3;
+				vertical-align: top;
+				margin: 80px auto;
+				padding: 10px;
+				border-radius: 0 8px 8px 0;
+				color: #F0F0F0;
+				font-family: 'Ubuntu Mono';
+				font-size: 24px;
+				text-align: left;
+			}
+			
+			#main_content {
+			
+			}
+			
+			#name_bar {
+				background-color: #36A4B3;
+				border-radius: 8px 0 0 8px;
+				margin: 80px 10px 0 auto;
+				width: 200px;
+				height: 400px;
+				font-family: 'Ubuntu Mono';
+				font-size: 48px;
+				color: #F0F0F0;
+				padding: 10px;
+				display: inline-block;
+				vertical-align: top;
+			}
+			/* awesome social network icons from https://github.com/fontello/brandico.font */
+			@font-face {
+				font-family: 'brandico';
+				src:	url('./media/brandico.woff') format('woff'),
+					url('./media/brandico.eot') format('embedded-truetype'),
+					url('./media/brandico.ttf') format('truetype'),
+					url('./media/brandico.svg') format('svg');
+				font-weight: normal;
+				font-style: normal;
+			}
+		</style>		
+	</head>
+	<body>
+		<div class='main_content'>
+			<div id='name_bar'> 
+				Dustin
+				Preuss
+			</div>
+			
+			<div id='contact_info'>
+				Software Engineer<br/>
+				Mountain View, CA<br/><br/>
+				<div style='display: inline-block; text-align: center'>
+					<span class='social_icons'>&#xf303;</span><br/> 
+					<span class='social_icons'>&#xf308;</span><br/>					
+					<span class='social_icons'>&#xf31b;</span><br/>
+					<span class='social_icons'>&#xf30b;</span><br/>
+				</div>
+				<div style='display: inline-block'>
+					<a href='http://twitter.com/chibzu'>@chibzu</a><br/>
+					<a href='https://github.com/chibzu'>chibzu</a><br/>
+					<a href='http://linkedin.com/in/dstnpreuss'>dstnpreuss</a><br/>
+					dstnpreuss<br/>
+				</div><br/>
+				<canvas id='email_canvas' width='500px'></canvas>
+			</div>
+		</div>
+		<script type='text/javascript'>
+			var inputIndex = 0;
+			var corgiIndex = 0;
+			var secretCode = [38,38,40,40,37,39,37,39,66,65];
+			var corgiCode = [65,66,65,67,65,66,66];
+			document.addEventListener("DOMContentLoaded", function(){
+				document.body.addEventListener("keyup", function(evt){
+					if (evt.keyCode === secretCode[inputIndex])
+						inputIndex++;					
+					else 
+						inputIndex = 0;					
+					
+					if (inputIndex == secretCode.length) {
+						inputIndex = 0;
+						overlord();
+					}
+
+					if (evt.keyCode === corgiCode[corgiIndex])
+						corgiIndex++;
+					else
+						corgiIndex = 0;
+
+					if (corgiIndex == corgiCode.length) {
+						corgiIndex = 0;
+						corgify();
+					}
+				});
+			});
+			
+			function overlord(){if(window.overlords===undefined)window.overlords=[];var overlord=document.createElement("img");overlord.src="http://dl.dropbox.com/u/20851214/overlord.png";overlord.style.position="fixed";overlord.style.top=((Math.random()*(window.innerHeight-100)+1))+"px";overlord.style.left="0px";window.overlords.push(overlord);document.body.appendChild(overlord);function drift(){for(i=0;i<overlords.length;i++){var ovie=overlords[i];ovie.style.left=(parseInt(ovie.style.left)+10)+"px";if(parseInt(ovie.style.left)>window.innerWidth)overlords.splice(i,1);}setTimeout(drift,100);}if(window.drifting===undefined){window.drifting=true;drift();}}
+			
+
+			function corgify() {
+				document.body.style.background = "url('http://placecorgi.com/500/500')";
+			}
+
+			document.body.onload = function(){
+				var canvas = document.querySelector("#email_canvas");
+				var ctx = canvas.getContext("2d");
+				ctx.translate(0.5, 0.5);
+				ctx.font = "24px 'Ubuntu Mono'";
+				ctx.fillStyle = "#F0F0F0";
+				ctx.strokeStyle = "#F0F0F0";
+				ctx.fillText("dstnpreuss", 50, 30);
+				ctx.lineWidth = 3;
+				ctx.lineCap = "round";
+				ctx.fillText("@", 180, 30);
+				ctx.lineJoin = "round";
+				ctx.strokeRect(3,10,30,20);
+				ctx.beginPath();
+				ctx.moveTo(3,10);
+				ctx.lineTo(18, 22);
+				ctx.lineTo(33, 10);
+				ctx.stroke();						
+				ctx.fillText("gmail.com", 195, 30);
+			};			
+		</script>
+	</body>	
+</html>
